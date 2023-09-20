@@ -5,6 +5,7 @@ import com.procesos.tienda.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -16,11 +17,11 @@ public class UserService {
         return userRepository.save(userReq);
 
     }
-    public Optional<User> getUserById(Long id){
-        return userRepository.findById(id);
+    public User getUserById(Long id){
+        return userRepository.findById(id).get();
     }
-    public User updateUser(User userReq){
-        Optional<User> userBd=userRepository.findById(userReq.getId());
+    public User updateUser(User userReq, Long id){
+        Optional<User> userBd=userRepository.findById(id);
         if(userBd.isEmpty()){
             return null;
         }
@@ -28,7 +29,7 @@ public class UserService {
         userBd.get().setFirstName(userReq.getFirstName());
         userBd.get().setAddress(userReq.getAddress());
         userBd.get().setPhone(userReq.getPhone());
-        return userRepository.save(userReq);
+        return userRepository.save(userBd.get());
     }
 
     public boolean deleteUser(Long id){
@@ -38,5 +39,9 @@ public class UserService {
         }
         userRepository.delete(userBd.get());
         return true;
+    }
+
+    public List<User> findAllUsers(){
+        return (List<User>) userRepository.findAll();
     }
 }
