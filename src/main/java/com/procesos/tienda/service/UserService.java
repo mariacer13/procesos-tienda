@@ -27,7 +27,6 @@ public class UserService {
         }
         userBd.get().setFirstName(userReq.getFirstName());
         userBd.get().setFirstName(userReq.getFirstName());
-        userBd.get().setAddress(userReq.getAddress());
         userBd.get().setPhone(userReq.getPhone());
         return userRepository.save(userBd.get());
     }
