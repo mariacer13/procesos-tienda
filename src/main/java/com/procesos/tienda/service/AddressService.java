@@ -1,8 +1,10 @@
 package com.procesos.tienda.service;
 
+import com.procesos.tienda.exception.NotFoundException;
 import com.procesos.tienda.model.Address;
 import com.procesos.tienda.model.User;
 import com.procesos.tienda.repository.AddressRepository;
+import com.procesos.tienda.util.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,17 +19,14 @@ public class AddressService {
 
     public Address createAddress(Address address, Long idUser){
         User user= userService.getUserById(idUser);
-        if(user == null){
-            throw new RuntimeException("User not found");
-        }
         address.setUser(user);
-       return  addressRepository.save(address);
+        return  addressRepository.save(address);
     }
 
     public Address updateStatusAddress(Long id){
         Optional<Address> address=addressRepository.findById(id);
         if(address.isEmpty()){
-            throw new RuntimeException("address not found");
+            throw new NotFoundException(Constants.ADDRESS_NOT_FOUND.getMessage());
 
         }
         address.get().setStatus(Boolean.FALSE);
@@ -37,7 +36,7 @@ public class AddressService {
     public Address getByIdAddress(Long id){
         Optional<Address> address=addressRepository.findById(id);
         if(address.isEmpty()){
-            throw new RuntimeException("address not found");
+            throw new NotFoundException(Constants.ADDRESS_NOT_FOUND.getMessage());
 
         }
         return address.get();
